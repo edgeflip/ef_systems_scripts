@@ -7,13 +7,13 @@ set -e # bail on any failures
 
 
 # Fill this out
-AS="edgeflip-production-as"
-LC="edgeflip-production-64"
-ELB="edgeflip-production"
+AS="edgeflip-staging-as"
+LC="edgeflip-staging-64"
+ELB="edgeflip-staging"
 AMI="ami-3fec7956"
 SG="edgeflip-ec2-sg"
 SIZE="m1.medium"
-CONFIG="/u/edgeflip/cloud-init/edgeflip-production-64"
+CONFIG="/u/edgeflip/cloud-init/edgeflip-staging-64"
 AS_SCALEUP_POLICY_NAME="${ELB}-scaleup"
 AS_SCALEDOWN_POLICY_NAME="${ELB}-scaledown"
 HIGHCPU_ALARM_NAME="${ELB}-HighCPU"
@@ -26,7 +26,7 @@ UNHEALTHY_THRESHOLD="2"
 HEALTHY_THRESHOLD="5"
 CREATE_ELB="1" #If you already have an ELB, set to 0.  If not, set to 1 to create.
 APP="edgeflip"
-APPENV="production"
+APPENV="staging"
 
 
 
