@@ -19,9 +19,7 @@ check_args() {
     then
         VERSION="$2"
     else
-        echo "No package version supplied"
-        echo "Usage: $0 gitTag debVersion"
-        exit 1
+        VERSION=`echo ${TAG} | sed 's/v//g'`
     fi
 }
 
