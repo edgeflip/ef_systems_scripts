@@ -5,12 +5,12 @@ set -e
 SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 . ${SCRIPT_DIR}/../functions.sh
 
-PACKAGE='edgeflip'
+PACKAGE='mockclient'
 DEST_DIR=$PACKAGE
-REPODIR='git@github.com:edgeflip/edgeflip.git'
+REPODIR='git@github.com:edgeflip/mockclient.git'
 HOMEPAGE='http://fill.me.in'
-DESCRIPTION='(Edgeflip) Edgeflip app'
-REQUIREMENTS='/var/www/edgeflip/compiled.txt'
+DESCRIPTION='(Edgeflip) Edgeflip mock client app'
+REQUIREMENTS='requirements.txt'
 BASE_DIR=/var/www
 
 check_args $1 $2
