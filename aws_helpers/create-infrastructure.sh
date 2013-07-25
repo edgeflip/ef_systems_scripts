@@ -7,13 +7,13 @@ set -e # bail on any failures
 
 
 # Fill this out
-AS="edgeflip-staging-as"
-LC="edgeflip-staging-64"
-ELB="edgeflip-staging"
-AMI="ami-3fec7956"
+AS="eflip-production-as"
+LC="eflip-production-64-medium"
+ELB="eflip-production"
+AMI="ami-d9d6a6b0"
 SG="edgeflip-ec2-sg"
 SIZE="m1.medium"
-CONFIG="/u/edgeflip/cloud-init/edgeflip-staging-64"
+CONFIG="/u/edgeflip/cloud-init/eflip-production-64"
 AS_SCALEUP_POLICY_NAME="${ELB}-scaleup"
 AS_SCALEDOWN_POLICY_NAME="${ELB}-scaledown"
 HIGHCPU_ALARM_NAME="${ELB}-HighCPU"
@@ -25,8 +25,8 @@ HEALTHCHECK_INTERVAL="20"
 UNHEALTHY_THRESHOLD="2"
 HEALTHY_THRESHOLD="5"
 CREATE_ELB="1" #If you already have an ELB, set to 0.  If not, set to 1 to create.
-APP="edgeflip"
-APPENV="staging"
+APP="eflip"
+APPENV="production"
 
 
 
@@ -36,7 +36,7 @@ if [[ $CREATE_ELB -eq 1 ]]
     then
     # CREATE ELB
     elb-create-lb ${ELB} --listener "protocol=HTTP, lb-port=80, instance-port=80" \
-                     --availability-zones us-east-1c,us-east-1d
+                     --availability-zones us-east-1c
     fi
 
 # Update/Change listeners
@@ -67,7 +67,7 @@ as-create-launch-config ${LC} --key edgeflip --image-id ${AMI} --instance-type $
 ##############################
 ## AUTOSCALE GROUP CREATION
 as-create-auto-scaling-group ${AS} --launch-configuration ${LC} --load-balancers \
-        ${ELB} --availability-zones us-east-1c,us-east-1d --min-size 0 --max-size 0 \
+        ${ELB} --availability-zones us-east-1c --min-size 0 --max-size 0 \
         --health-check-type EC2 --default-cooldown 300 --grace-period 0 \
         --tag "k=env,v=${APPENV},p=true" --tag "k=app,v=${APP},p=true"
 

@@ -56,7 +56,7 @@ build_python_noreqs() {
 build_python() {
     virtualenv .
     source bin/activate
-    bin/pip install -r $REQUIREMENTS
+    pip install -r $REQUIREMENTS
     rm -rf local
     python -m compileall .
     deactivate
