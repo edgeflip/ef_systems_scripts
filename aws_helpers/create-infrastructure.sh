@@ -7,13 +7,13 @@ set -e # bail on any failures
 
 
 # Fill this out
-AS="eflip-production-as"
-LC="eflip-production-64-medium"
-ELB="eflip-production"
+AS="edgeflip-staging-rmq-as"
+LC="edgeflip-staging-64-rmq"
+ELB="edgeflip-staging-rmq"
 AMI="ami-d9d6a6b0"
 SG="edgeflip-ec2-sg"
-SIZE="m1.medium"
-CONFIG="/u/edgeflip/cloud-init/eflip-production-64"
+SIZE="m1.small"
+CONFIG="/u/edgeflip/cloud-init/edgeflip-staging-rmq-64"
 AS_SCALEUP_POLICY_NAME="${ELB}-scaleup"
 AS_SCALEDOWN_POLICY_NAME="${ELB}-scaledown"
 HIGHCPU_ALARM_NAME="${ELB}-HighCPU"
@@ -25,8 +25,8 @@ HEALTHCHECK_INTERVAL="20"
 UNHEALTHY_THRESHOLD="2"
 HEALTHY_THRESHOLD="5"
 CREATE_ELB="1" #If you already have an ELB, set to 0.  If not, set to 1 to create.
-APP="eflip"
-APPENV="production"
+APP="edgeflip"
+APPENV="staging"
 
 
 
@@ -61,7 +61,7 @@ elb-describe-lbs ${ELB} --show-long --headers
 
 ##############################
 ## LAUNCH CONFIG CREATION
-as-create-launch-config ${LC} --key edgeflip --image-id ${AMI} --instance-type ${SIZE} \
+as-create-launch-config ${LC} --key edgeflip_052613 --image-id ${AMI} --instance-type ${SIZE} \
         --user-data-file ${CONFIG} --group ${SG}
 
 ##############################

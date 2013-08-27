@@ -15,6 +15,7 @@ def hosts(group_names):
 env.roledefs = {
     'edgeflip-production': hosts(['demandaction-production-as']),
     'edgeflip-staging': hosts(['edgeflip-staging-as']),
+    'edgeflipcelery-staging': hosts(['eflipcelery-staging-as']),
     'eflip-production': hosts(['eflip-production-as']),
     'eflip-celery-production': hosts(['eflip-production-celery-as'])
 

@@ -9,9 +9,9 @@
 REQUIREDARGS=3
 NUMOFARGS=$#
 NEWRELIC_USER=Jenkins
-JENKINS_AWSHOME=/home/ubuntu/.aws
+JENKINS_AWSHOME=/home/ubuntu/
 FABFILE=${JENKINS_AWSHOME}/fabfile.py
-ID_RSA_FILE=".idrsa"
+ID_RSA_FILE="ef_deploy_id_rsa"
 
 # Source the other vars
 . /etc/environment
@@ -103,8 +103,6 @@ check_current_version() {
         OLD_VERSION="v`echo $APP_CURRENT_VERSION`"
         echo "Old version we saw on $APPENVNAME nodes: $OLD_VERSION"
         echo "New version: $NEW_VERSION"
-
-        cat ${DEPLOYTMP}
     }
 
 build_new_version() {
@@ -237,13 +235,20 @@ new_version_check() {
 
         echo "`date` -- Sleeping for 30 seconds to allow nodes to get new version"
         sleep 30
+
         echo " "
         echo "#################################"
         export PROGSTEP="Checking versions for $."
         echo "`date` -- $PROGSTEP"
-        fab -f ${FABFILE} -i ${JENKINS_AWSHOME}/${ID_RSA_FILE} -D -w -P -R $FABRIC_ALIAS -- "sudo aptitude show `echo $APP_NAME`"|grep Version > $VERSIONREPORT 2> $DEPLOYTMP
+        fab -f ${FABFILE} -i ${JENKINS_AWSHOME}/${ID_RSA_FILE} -D -w -P -R $FABRIC_ALIAS -- "sudo aptitude show `echo $APP_NAME`"|grep Version |tee $VERSIONREPORT 2> $DEPLOYTMP
                 RETURN_CODE=$?;error_check
-        cat $VERSIONREPORT
+
+        if grep ${APP_CURRENT_VERSION} ${VERSIONREPORT} > /dev/null
+            then
+            echo " ";echo " "
+            echo "`date` --  ALERT, OLD VERSION STILL DETECTED ON $APP_NAME IN $APP_ENV"
+            exit 1
+        fi
     }
 
 newrelic_deploy() {
@@ -278,6 +283,24 @@ case $APPENVNAME in
         NEWRELIC_APP="edgeflipcelery-staging"
         FABRIC_ALIAS="edgeflipcelery-staging"
         APT_NAME="edgeflipcelery"
+        REPO_NAME="edgeflip"
+        KICK_TYPE="parallel"      # How safe and slow should we kick?  Options: parallel, normal, rolling
+        ;;
+
+    edgeflip-production )
+        NEWRELIC_ENABLED=1
+        NEWRELIC_APP="edgeflip-production"
+        FABRIC_ALIAS="edgeflip-production"
+        APT_NAME="edgeflip"
+        REPO_NAME="edgeflip"
+        KICK_TYPE="rolling"      # How safe and slow should we kick?  Options: parallel, normal, rolling
+        ;;
+
+    edgeflip-staging )
+        NEWRELIC_ENABLED=1
+        NEWRELIC_APP="edgeflip-staging"
+        FABRIC_ALIAS="edgeflip-staging"
+        APT_NAME="edgeflip"
         REPO_NAME="edgeflip"
         KICK_TYPE="parallel"      # How safe and slow should we kick?  Options: parallel, normal, rolling
         ;;

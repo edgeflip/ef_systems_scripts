@@ -2,7 +2,7 @@ DEBFULLNAME="EF DevOps"
 DEBEMAIL="devops@edgeflip.com"
 BUILDS_DIR=/mnt/builds
 REPO_DIR=/mnt/packages
-
+export WORKON_HOME=$DEST_DIR/.virtualenvs
 eval `dpkg-architecture -s`
 
 check_args() {
@@ -54,14 +54,38 @@ build_python_noreqs() {
 }
 
 build_python() {
-    virtualenv .
+    virtualenv --distribute .
+    cp /var/www/edgeflip/edgeflip.pth /var/www/edgeflip/lib/python2.7/site-packages/
     source bin/activate
+    pip install distribute
     pip install -r $REQUIREMENTS
     rm -rf local
     python -m compileall .
     deactivate
 }
 
+build_python_celery() {
+    virtualenv --distribute .
+    cp /var/www/edgeflipcelery/edgeflip.pth /var/www/edgeflipcelery/lib/python2.7/site-packages/
+    source bin/activate
+    pip install distribute
+    pip install -r $REQUIREMENTS
+    /var/www/edgeflipcelery/bin/python /var/www/edgeflipcelery/setup.py develop
+    rm -rf local
+    python -m compileall .
+    deactivate
+}
+
+build_python_app() {
+    virtualenv --distribute .
+    source bin/activate
+    pip install distribute==0.7.3 -U
+    pip install -r $REQUIREMENTS
+    rm -rf local
+    /var/www/edgeflip/bin/python /var/www/edgeflip/manage.py collectstatic --noinput
+    python -m compileall .
+    deactivate
+}
 build_php() {
     echo "building php packages is easy"
 }
