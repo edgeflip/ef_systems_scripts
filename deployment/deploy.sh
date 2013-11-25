@@ -9,9 +9,9 @@
 REQUIREDARGS=3
 NUMOFARGS=$#
 NEWRELIC_USER=Jenkins
-JENKINS_AWSHOME=/home/ubuntu/
+JENKINS_AWSHOME=/home/ubuntu
 FABFILE=${JENKINS_AWSHOME}/fabfile.py
-ID_RSA_FILE="ef_deploy_id_rsa"
+ID_RSA_FILE="fabid_rsa"
 
 # Source the other vars
 . /etc/environment
@@ -289,7 +289,7 @@ case $APPENVNAME in
 
     edgeflip-production )
         NEWRELIC_ENABLED=1
-        NEWRELIC_APP="edgeflip-production"
+        NEWRELIC_APP="demandaction-production"
         FABRIC_ALIAS="edgeflip-production"
         APT_NAME="edgeflip"
         REPO_NAME="edgeflip"

@@ -13,17 +13,17 @@ def hosts(group_names):
     return _get_hosts
 
 env.roledefs = {
-    'edgeflip-production': hosts(['demandaction-production-as']),
-    'edgeflip-staging': hosts(['edgeflip-staging-as']),
-    'edgeflipcelery-staging': hosts(['eflipcelery-staging-as']),
-    'eflip-production': hosts(['eflip-production-as']),
-    'eflip-celery-production': hosts(['eflip-production-celery-as'])
+    'edgeflip-staging': hosts(['edgeflip2-staging-as', 'edgeflip2-staging-celery-as', 'edgeflip-staging-rmq-as']),
+    'edgeflip-production': hosts(['eflip-production-as', 'eflip-production-celery-as', 'eflip-production-rmq-as'])
 
 }
 
 @task
 def restart_puppet():
     sudo('cat /var/run/puppet/agent.pid | xargs kill -HUP')
+@task
+def remove_configs():
+    sudo('rm -rf /root/creds/app')
 
 @task
 def health_check():
@@ -32,10 +32,12 @@ def health_check():
 @task
 @parallel
 def kick():
+    remove_configs()
     restart_puppet()
 
 @task
 def rolling_kick():
+    remove_configs
     restart_puppet()
     wait(5)
 

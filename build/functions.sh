@@ -82,6 +82,7 @@ build_python_app() {
     pip install distribute==0.7.3 -U
     pip install -r $REQUIREMENTS
     rm -rf local
+    mkdir /var/www/edgeflip/conf.d
     /var/www/edgeflip/bin/python /var/www/edgeflip/manage.py collectstatic --noinput
     python -m compileall .
     deactivate
