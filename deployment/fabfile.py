@@ -14,8 +14,14 @@ def hosts(group_names):
     return _get_hosts
 
 env.roledefs = {
-    'edgeflip-staging': hosts(['edgeflip2-staging-as', 'edgeflip2-staging-celery-as', 'edgeflip2-staging-rmq-as']),
-    'edgeflip-production': hosts(['eflip-production-as', 'eflip-production-celery-as', 'eflip-production-rmq-as'])
+    'edgeflip-staging': hosts([
+        'edgeflip2-staging-as', 'edgeflip2-staging-celery-as',
+        'edgeflip2-staging-rmq-as', 'edgeflip2-staging-fbsync-as'
+    ]),
+    'edgeflip-production': hosts([
+        'eflip-production-as', 'eflip-production-celery-as',
+        'eflip-production-rmq-as', 'eflip-production-fbsync-as'
+    ])
 }
 
 
