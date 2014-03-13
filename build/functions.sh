@@ -84,6 +84,7 @@ build_python_app() {
     rm -rf local
     mkdir /var/www/edgeflip/conf.d
     /var/www/edgeflip/bin/python /var/www/edgeflip/manage.py collectstatic --noinput
+    /var/www/edgeflip/bin/python /var/www/edgeflip/manage.py jsurls install --minify --noinput
     python -m compileall .
     deactivate
 }
