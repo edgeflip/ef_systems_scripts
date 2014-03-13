@@ -22,7 +22,8 @@ env.roledefs = {
         'eflip-production-as', 'eflip-production-celery-as',
         'eflip-production-rmq-as', 'eflip-production-fbsync-as',
         'eflip-production-bg-celery-as', 'eflip-production-comments-fbsync-as',
-        'eflip-production-db-fbsync-as'
+        'eflip-production-db-fbsync-as', 'eflip-production-lowpri-fbsync-as',
+        'eflip-controller',
     ]),
     'edgeflip-fbsync': hosts([
         'eflip-production-fbsync-as',
