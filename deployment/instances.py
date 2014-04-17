@@ -4,12 +4,14 @@ import boto
 
 ec2 = boto.connect_ec2()
 
+
 def get_instance(instance_id):
     reservation = ec2.get_all_instances([instance_id])
     result = [i for i in reservation.instances if i.id == instance_id]
     if len(result) == 1:
         return result
     raise ValueError('Instance %s not found' % instance_id)
+
 
 def _get_instances(instance_ids):
     """ given a list of instance IDs, return the boto instance objects """
@@ -22,6 +24,7 @@ def _get_instances(instance_ids):
         return instances
     raise ValueError('No instances found in list')
 
+
 def _get_autoscale_group(name):
     conn = boto.connect_autoscale()
     groups = conn.get_all_groups(names=[name])
@@ -30,12 +33,13 @@ def _get_autoscale_group(name):
         return groups[0]
     raise ValueError('Autoscale group %s not found' % name)
 
+
 def get_as_instances(name):
     # TODO: filter on instance health
     group = _get_autoscale_group(name)
 
     as_instance_ids = [i.instance_id for i in group.instances]
-    return _get_instances(as_instance_ids)
+    return _get_instances(as_instance_ids) if as_instance_ids else []
 
 
 # TODO: this needs to be moved to facade with other hostname accessors
@@ -44,8 +48,9 @@ def from_as_group(name):
     if instances:
         hosts = [i.dns_name for i in instances]
     else:
-        hosts = None
+        hosts = []
     return hosts
+
 
 def main():
     instances = get_as_instances('openbadges-production-as')

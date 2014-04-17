@@ -1,6 +1,26 @@
 from fabric.api import *
 import instances
 
+STAGING = [
+    'edgeflip2-staging-as', 'edgeflip2-staging-celery-as',
+    'edgeflip2-staging-rmq-as', 'edgeflip2-staging-fbsync-as'
+]
+FBSYNC = [
+    'eflip-production-fbsync-as', 'eflip-production-comments-fbsync-as',
+    'eflip-production-db-fbsync-as', 'eflip-production-lowpri-fbsync-as',
+]
+TARGETED_CELERY = [
+    'eflip-production-celery-as', 'eflip-production-bg-celery-as'
+]
+TARGETED_WEB = ['eflip-production-as']
+TARGETED_SHARING = TARGETED_WEB + TARGETED_CELERY
+RMQ = [
+    'eflip-production-ebs-fbsync-rmq-as', 'eflip-production-ebs-rmq-as',
+]
+CONTROLLER = ['eflip-controller-as']
+PROD_APPS = CONTROLLER + TARGETED_SHARING + FBSYNC
+PROD_ALL = PROD_APPS + RMQ
+
 
 def hosts(group_names):
     """ return a callable that generates a list of hostnames when evaluated. """
@@ -14,26 +34,14 @@ def hosts(group_names):
     return _get_hosts
 
 env.roledefs = {
-    'edgeflip-staging': hosts([
-        'edgeflip2-staging-as', 'edgeflip2-staging-celery-as',
-        'edgeflip2-staging-rmq-as', 'edgeflip2-staging-fbsync-as'
-    ]),
-    'edgeflip-production': hosts([
-        'eflip-production-as', 'eflip-production-celery-as',
-        'eflip-production-rmq-as', 'eflip-production-fbsync-as',
-        'eflip-production-bg-celery-as', 'eflip-production-comments-fbsync-as',
-        'eflip-production-db-fbsync-as', 'eflip-production-lowpri-fbsync-as',
-        'eflip-controller',
-    ]),
-    'edgeflip-fbsync': hosts([
-        'eflip-production-fbsync-as',
-    ]),
-    'edgeflip-fbdb': hosts([
-        'eflip-production-db-fbsync-as',
-    ]),
-    'edgeflip-comments': hosts([
-        'eflip-production-comments-fbsync-as',
-    ])
+    'edgeflip-staging': hosts(STAGING),
+    'edgeflip-fbsync': hosts(FBSYNC),
+    'edgeflip-sharing': hosts(TARGETED_SHARING),
+    'edgeflip-sharing-celery': hosts(TARGETED_CELERY),
+    'edgeflip-sharing-web': hosts(TARGETED_WEB),
+    'edgeflip-prod-apps': hosts(PROD_APPS),
+    'edgeflip-prod-rmq': hosts(RMQ),
+    'edgeflip-prod-all': hosts(PROD_ALL),
 }
 
 
@@ -50,6 +58,11 @@ def remove_configs():
 @task
 def health_check():
     sudo('/usr/local/nagios/libexec/check_health')
+
+
+@task
+def check_version():
+    run('grep -E "(v[0-9]+\.[0-9]+.[0-9]+)" /var/www/edgeflip/app_info.json -o')
 
 
 @task
