@@ -59,6 +59,4 @@ sudo sed -i "s/START=no/START=yes/" /etc/default/puppet
 sudo service puppet restart
 
 echo "Things you will want to do next: "
-echo "1. Determine your puppetmaster IP, and create an /etc/hosts entry for 'puppetmaster' on the child"
-echo "2. Change the certname to fit your needs in /etc/puppet/puppet.conf"
-echo "3. Probably debug some trivial shit that isn't working quite right"
+echo "Login to your puppetmaster and run this: sudo puppet cert sign --all"
