@@ -6,8 +6,10 @@ STAGING = [
     'edgeflip2-staging-rmq-as', 'edgeflip2-staging-fbsync-as'
 ]
 FBSYNC = [
-    'eflip-production-fbsync-as', 'eflip-production-comments-fbsync-as',
+    'eflip-production-fbsync-user-feeds-as', 'eflip-production-initial-crawl-feeds-as'
+    'eflip-production-comments-fbsync-as', 'eflip-production-db-partial-fbsync-as',
     'eflip-production-db-fbsync-as', 'eflip-production-lowpri-fbsync-as',
+    'eflip-fbsync-controller', 'eflip-production-ebs-fbsync-xl-rmq',
 ]
 TARGETED_CELERY = [
     'eflip-production-celery-as', 'eflip-production-bg-celery-as'
@@ -15,7 +17,7 @@ TARGETED_CELERY = [
 TARGETED_WEB = ['eflip-production-as']
 TARGETED_SHARING = TARGETED_WEB + TARGETED_CELERY
 RMQ = [
-    'eflip-production-ebs-fbsync-rmq-as', 'eflip-production-ebs-rmq-as',
+    'eflip-production-ebs-fbsync-xl-rmq-as', 'eflip-production-ebs-rmq-as',
 ]
 CONTROLLER = ['eflip-controller-as']
 PROD_APPS = CONTROLLER + TARGETED_SHARING + FBSYNC
