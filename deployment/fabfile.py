@@ -6,10 +6,10 @@ STAGING = [
     'edgeflip2-staging-rmq-as', 'edgeflip2-staging-fbsync-as'
 ]
 FBSYNC = [
-    'eflip-production-fbsync-user-feeds-as', 'eflip-production-initial-crawl-feeds-as'
+    'eflip-production-fbsync-user-feeds-as', 'eflip-production-fbsync-initial-crawl-as',
     'eflip-production-comments-fbsync-as', 'eflip-production-db-partial-fbsync-as',
     'eflip-production-db-fbsync-as', 'eflip-production-lowpri-fbsync-as',
-    'eflip-fbsync-controller', 'eflip-production-ebs-fbsync-xl-rmq',
+    'eflip-fbsync-controller-as', 'eflip-production-ebs-fbsync-xl-rmq-as',
 ]
 TARGETED_CELERY = [
     'eflip-production-celery-as', 'eflip-production-bg-celery-as'
