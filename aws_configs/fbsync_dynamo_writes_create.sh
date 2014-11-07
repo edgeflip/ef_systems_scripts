@@ -6,7 +6,6 @@ set -e # bail on any failures
 # Fill this out
 AS="eflip-production-fbsync-dynamo-writes-as"
 LC="eflip-production-64-fbsync-dynamo-writes"
-ELB="eflip-production-fbsync-dynamo-writes"
 AMI="ami-d9d6a6b0"
 SG="edgeflip-ec2-sg"
 SIZE="m3.medium"
