@@ -290,7 +290,7 @@ case $APPENVNAME in
     edgeflip-production )
         NEWRELIC_ENABLED=1
         NEWRELIC_APP="demandaction-production"
-        FABRIC_ALIAS="edgeflip-prod-all"
+        FABRIC_ALIAS="edgeflip-prod-apps"
         APT_NAME="edgeflip"
         REPO_NAME="edgeflip"
         KICK_TYPE="rolling"      # How safe and slow should we kick?  Options: parallel, normal, rolling
