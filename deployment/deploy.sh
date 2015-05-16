@@ -188,7 +188,7 @@ sync_the_repo() {
         echo " "
         echo "#################################"
         echo "`date` -- Syncing apt-repo on geppetto"
-        ssh -i /home/ubuntu/.aws/id_rsa ubuntu@geppetto.efprod.com -t "/home/ubuntu/pull-apt-repo.sh"
+        ssh -i /var/lib/jenkins/geppetto_id_rsa ubuntu@geppetto.efprod.com -t "/home/ubuntu/pull-apt-repo.sh"
             RETURN_CODE=$?;error_check
         echo "`date` -- Completed sync of apt-repo on geppetto with $RETURN_CODE"
     }
@@ -202,17 +202,17 @@ kick_the_nodes() {
         echo "`date` -- $PROGSTEP"
         case $KICK_TYPE in
                 "parallel" )
-                        fab -f ${FABFILE} -i ${JENKINS_AWSHOME}/${ID_RSA_FILE} -D -P -R $FABRIC_ALIAS kick
+                        fab -f ${FABFILE} -u ubuntu -i ${JENKINS_AWSHOME}/${ID_RSA_FILE} -D -P -R $FABRIC_ALIAS kick
                                 RETURN_CODE=$?;error_check
                         ;;
 
                 "normal" )
-                        fab -f ${FABFILE} -i ${JENKINS_AWSHOME}/${ID_RSA_FILE} -D -w -R $FABRIC_ALIAS kick
+                        fab -f ${FABFILE} -u ubuntu -i ${JENKINS_AWSHOME}/${ID_RSA_FILE} -D -w -R $FABRIC_ALIAS kick
                                 RETURN_CODE=$?;error_check
                         ;;
 
                 "rolling" )
-                        fab -f ${FABFILE} -i ${JENKINS_AWSHOME}/${ID_RSA_FILE} -D -w -R $FABRIC_ALIAS -- "sudo rm -rf /root/creds/app;sudo pkill -9 puppet;sudo service puppet restart;sleep 10" 2>&1 > $DEPLOYTMP
+                        fab -f ${FABFILE} -u ubuntu -i ${JENKINS_AWSHOME}/${ID_RSA_FILE} -D -w -R $FABRIC_ALIAS -- "sudo rm -rf /root/creds/app;sudo pkill -9 puppet;sudo service puppet restart;sleep 10" 2>&1 > $DEPLOYTMP
                                 RETURN_CODE=$?;error_check
                         ;;
                 esac
@@ -240,7 +240,7 @@ new_version_check() {
         echo "#################################"
         export PROGSTEP="Checking versions for $."
         echo "`date` -- $PROGSTEP"
-        fab -f ${FABFILE} -i ${JENKINS_AWSHOME}/${ID_RSA_FILE} -D -w -P -R $FABRIC_ALIAS -- "sudo aptitude show `echo $APP_NAME`"|grep Version |tee $VERSIONREPORT 2> $DEPLOYTMP
+        fab -f ${FABFILE} -u ubuntu -i ${JENKINS_AWSHOME}/${ID_RSA_FILE} -D -w -P -R $FABRIC_ALIAS -- "sudo aptitude show `echo $APP_NAME`"|grep Version |tee $VERSIONREPORT 2> $DEPLOYTMP
                 RETURN_CODE=$?;error_check
 
         if grep ${APP_CURRENT_VERSION} ${VERSIONREPORT} > /dev/null
