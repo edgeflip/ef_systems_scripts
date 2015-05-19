@@ -188,7 +188,7 @@ sync_the_repo() {
         echo " "
         echo "#################################"
         echo "`date` -- Syncing apt-repo on geppetto"
-        ssh -i /var/lib/jenkins/geppetto_id_rsa ubuntu@geppetto.efprod.com -t "/home/ubuntu/pull-apt-repo.sh"
+        ssh -i /home/ubuntu/geppetto_id_rsa ubuntu@geppetto.efprod.com -t "/home/ubuntu/pull-apt-repo.sh"
             RETURN_CODE=$?;error_check
         echo "`date` -- Completed sync of apt-repo on geppetto with $RETURN_CODE"
     }
@@ -234,7 +234,7 @@ new_version_check() {
         if [ -s $DEPLOYTMP ] > /dev/null;then rm $DEPLOYTMP;fi
 
         echo "`date` -- Sleeping for 30 seconds to allow nodes to get new version"
-        sleep 30
+        sleep 40
 
         echo " "
         echo "#################################"
